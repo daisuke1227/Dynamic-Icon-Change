@@ -1,0 +1,14 @@
+{
+	"geode": "4.0.1",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "trealdry.dynamic-icon-change",
+	"name": "dynamic-icon-change",
+	"version": "v0.1.0",
+	"developer": "TrealDry",
+	"description": "Dynamically changes icons during game play."
+}
