@@ -1,6 +1,9 @@
 #include <random>
+#include <string>
 
 #include <Geode/Geode.hpp>
+
+#include <Geode/loader/SettingV3.hpp>
 
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
@@ -11,11 +14,27 @@ using got = GameObjectType;
 std::random_device rd;
 std::mt19937 gen(rd());
 
-bool enableMod = false;
+bool enableMod = false;  // Enable = enter level, Disable = exit level
+bool globalEnableMod = !Mod::get()->getSettingValue<bool>("disable-mod");  // Turns the mod completely off or on
+
 int originalIcons[8] = {1, 1, 1, 1, 1, 1, 1, 1};
-int iconIdLimits[8] = {28, 7, 2, 3, 2, 1, 1, 43};
+
+int iconIdMinRange[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+int iconIdMaxRange[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+std::string_view nameRangeSettings[16] = {
+	"min-range-cube", "max-range-cube", "min-range-ship", "max-range-ship", 
+	"min-range-ball", "max-range-ball", "min-range-ufo", "max-range-ufo", 
+	"min-range-wave", "max-range-wave", "min-range-robot", "max-range-robot",
+	"min-range-spider", "max-range-spider", "min-range-swing", "max-range-swing",
+};
 
 auto gmPtr = GameManager::get();
+
+$execute {
+	listenForSettingChanges("disable-mod", [](bool value) {
+		globalEnableMod = !value;
+	});
+}
 
 // GJGameLayer::update setplayerframe
 
@@ -42,22 +61,39 @@ void resetOriginalIcons() {
 class $modify(MyPlayLayer, PlayLayer) {
 
 	bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
-		enableMod = true;
+		if (globalEnableMod) {
+			enableMod = true;
 
-		for (int i = 0; i <= 7; i++) {
-			originalIcons[i] = gmPtr->activeIconForType(static_cast<IconType>(i));
-			log::debug("{}", originalIcons[i]);
+			for (int i = 0; i <= 7; i++) {
+				// init min-max range icons
+				int indexMin = i; int indexMax = i;
+
+				if (indexMin != 0) indexMin = indexMin * 2;
+				indexMax = indexMin + 1;
+
+				iconIdMinRange[i] = Mod::get()->getSettingValue<int64_t>(nameRangeSettings[indexMin]);
+				iconIdMaxRange[i] = Mod::get()->getSettingValue<int64_t>(nameRangeSettings[indexMax]);
+				
+				// save original icon kit
+				originalIcons[i] = gmPtr->activeIconForType(static_cast<IconType>(i));
+				log::debug("Original icon №{} - {}", i, originalIcons[i]);
+			}
+
+			log::debug("!!! Mod is enable !!!");
+
 		}
 
-		log::debug("!!! Mod is enable !!!");
 		return PlayLayer::init(level, useReplay, dontCreateObjects);
 	}
 
 	void onQuit() {
-		enableMod = false;
-		resetOriginalIcons();
+		if (globalEnableMod) {
+			enableMod = false;
+			resetOriginalIcons();
 
-		log::debug("!!! Mod is disable !!!");
+			log::debug("!!! Mod is disable !!!");
+		}
+
         PlayLayer::onQuit();
     }
 
@@ -67,19 +103,17 @@ class $modify(MyPlayerObject, PlayerObject) {
 
 	void toggleFlyMode(bool p0, bool p1) {
 		if (enableMod) {
-			for (int i = 1; i <= 8; i++) {
-				int randIcon = (gen() % iconIdLimits[i - 1]) + 1;
-				setIcon(i, randIcon);
+			for (int i = 0; i <= 7; i++) {
+				int randIcon = (gen() % (iconIdMaxRange[i] - iconIdMinRange[i] + 1)) + iconIdMinRange[i];
+				setIcon(i+1, randIcon);
 
-				if (i == 1)
+				if (i == 0)
 					PlayerObject::updatePlayerFrame(randIcon);
-				else if (i == 6)
+				else if (i == 5)
 					PlayerObject::updatePlayerRobotFrame(randIcon);
-				else if (i == 7)
+				else if (i == 6)
 					PlayerObject::updatePlayerSpiderFrame(randIcon);
-				
 			}
-
 		}
 
 		PlayerObject::toggleFlyMode(p0, p1);
