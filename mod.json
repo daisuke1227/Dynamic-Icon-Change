@@ -10,7 +10,7 @@
 
 	"id": "trealdry.dynamic-icon-change",
 	"name": "dynamic-icon-change",
-	"version": "v0.2.0",
+	"version": "v0.2.1",
 	"developer": "TrealDry",
 	"description": "Dynamically changes icons during game play.",
 
@@ -39,120 +39,120 @@
 		"min-range-cube": {
 			"type": "int",
 			"name": "Min range of cube icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 485
 		},
 		"max-range-cube": {
 			"type": "int",
 			"name": "Max range of cube icons",
 			"default": 485,
-			"min": 0,
+			"min": 1,
 			"max": 485
 		},
 
 		"min-range-ship": {
 			"type": "int",
 			"name": "Min range of ship icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 169
 		},
 		"max-range-ship": {
 			"type": "int",
 			"name": "Max range of ship icons",
 			"default": 169,
-			"min": 0,
+			"min": 1,
 			"max": 169
 		},
 
 		"min-range-ball": {
 			"type": "int",
 			"name": "Min range of ball icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 118
 		},
 		"max-range-ball": {
 			"type": "int",
 			"name": "Max range of ball icons",
 			"default": 118,
-			"min": 0,
+			"min": 1,
 			"max": 118
 		},
 		
 		"min-range-ufo": {
 			"type": "int",
 			"name": "Min range of ufo icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 149
 		},
 		"max-range-ufo": {
 			"type": "int",
 			"name": "Max range of ufo icons",
 			"default": 149,
-			"min": 0,
+			"min": 1,
 			"max": 149
 		},
 
 		"min-range-wave": {
 			"type": "int",
 			"name": "Min range of wave icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 96
 		},
 		"max-range-wave": {
 			"type": "int",
 			"name": "Max range of wave icons",
 			"default": 96,
-			"min": 0,
+			"min": 1,
 			"max": 96
 		},
 
 		"min-range-robot": {
 			"type": "int",
 			"name": "Min range of robot icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 68
 		},
 		"max-range-robot": {
 			"type": "int",
 			"name": "Max range of robot icons",
 			"default": 68,
-			"min": 0,
+			"min": 1,
 			"max": 68
 		},
 
 		"min-range-spider": {
 			"type": "int",
 			"name": "Min range of spider icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 69
 		},
 		"max-range-spider": {
 			"type": "int",
 			"name": "Max range of spider icons",
 			"default": 69,
-			"min": 0,
+			"min": 1,
 			"max": 69
 		},
 		
 		"min-range-swing": {
 			"type": "int",
 			"name": "Min range of swing icons",
-			"default": 0,
-			"min": 0,
+			"default": 1,
+			"min": 1,
 			"max": 43
 		},
 		"max-range-swing": {
 			"type": "int",
 			"name": "Max range of swing icons",
 			"default": 43,
-			"min": 0,
+			"min": 1,
 			"max": 43
 		}
 	}
