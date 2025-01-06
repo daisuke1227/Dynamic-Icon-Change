@@ -1,3 +1,6 @@
+# 0.2.2
+- If you close game in a level (non-correct completion of mod), you will still have original icons.
+
 # 0.2.1
 - Fixed a flaw whereby 0 icon index could be selected in the settings.
 

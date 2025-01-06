@@ -1,11 +1,15 @@
 #include <random>
 #include <string>
+#include <cstdlib>
+#include <iostream>
 
 #include <Geode/Geode.hpp>
 
 #include <Geode/loader/SettingV3.hpp>
 
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/modify/CCDirector.hpp>
+#include <Geode/modify/AppDelegate.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 
 using namespace geode::prelude;
@@ -117,5 +121,19 @@ class $modify(MyPlayerObject, PlayerObject) {
 		}
 
 		PlayerObject::toggleFlyMode(p0, p1);
+	}
+};
+
+class $modify(MyAppDelegate, AppDelegate) {
+	void trySaveGame(bool p0) {
+		/*
+			loads original icons if game is 
+			switched off (when mod ends incorrectly).
+		*/
+
+		if (enableMod) 
+			resetOriginalIcons();
+
+		AppDelegate::trySaveGame(p0);
 	}
 };

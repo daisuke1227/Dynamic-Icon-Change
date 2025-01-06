@@ -1,3 +1,3 @@
-# Template Mod
+# Dynamic Icon Change
 
-Edit about.md to change this
+Dynamically changes icons during game play.
