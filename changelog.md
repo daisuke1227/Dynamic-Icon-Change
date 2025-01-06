@@ -1,3 +1,7 @@
+# 0.2.3
+- Fixed a bug causing undefined behavior when going through a portal (with same mode).
+- Added mod operation switch to the pause menu.
+
 # 0.2.2
 - If you close game in a level (non-correct completion of mod), you will still have original icons.
 
