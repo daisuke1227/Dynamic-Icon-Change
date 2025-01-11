@@ -10,9 +10,11 @@
 
 	"id": "trealdry.dynamic-icon-change",
 	"name": "dynamic-icon-change",
-	"version": "v0.2.3",
-	"developer": "TrealDry",
+	"version": "v0.3.0",
+	"developers": ["TrealDry", "MrKolii"],
 	"description": "Dynamically changes icons during game play.",
+
+	"tags": ["customization", "offline"],
 
 	"links": {
 		"source": "https://github.com/TrealDry/Dynamic-Icon-Change", 
