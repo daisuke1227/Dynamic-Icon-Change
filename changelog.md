@@ -1,3 +1,10 @@
+# 0.3.0
+- Global code refactoring.
+- Improving the toggler in pause:
+    - Prohibits switching if the range is set incorrectly.
+    - Added text informing about its purpose.
+- Adding a logo, changes to about.md, and more (metadata).
+
 # 0.2.3
 - Fixed a bug causing undefined behavior when going through a portal (with same mode).
 - Added mod operation switch to the pause menu.

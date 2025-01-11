@@ -49,7 +49,7 @@ void GUIManager::onFlippedToggler(CCObject* sender) {
 
         if (dic->getIconLimits() == nullptr) dic->initMod();
 
-        dic->enableMod();
+        dic->enableMod(nullptr);
     } else {
         PlayerObject* player1 = gmPtr->m_playLayer->m_player1;
         int activeMode = 0;
@@ -83,6 +83,7 @@ void DynamicIconChange::initInstance(DynamicIconChange* instance) {
     if (DynamicIconChange::initClass) return;
 
     instance->modStatus = false;
+    instance->wrongIconRange = false;
     instance->globalModStatus = SettingsManager::getGlobalStatusMod();
     instance->im = new IconManager;
     instance->il = nullptr;
@@ -91,15 +92,31 @@ void DynamicIconChange::initInstance(DynamicIconChange* instance) {
 }
 
 void DynamicIconChange::initMod() {
+    if (il != nullptr) delete il;  // solving a memory leak
+
     il = SettingsManager::getIconLimits();
 
-    if (!this->validateLimits()) return;
+    if (!this->validateLimits()) {
+        this->wrongIconRange = true;
+        return;
+    }
+
+    if (this->wrongIconRange) this->wrongIconRange = false;  // disable wIR if validation was successful
 
     log::debug("INIT MOD");
 }
 
-void DynamicIconChange::enableMod() {
+void DynamicIconChange::enableMod(PlayLayer* pl) {
     if (!this->globalModStatus) return;
+
+    if (this->wrongIconRange) {
+        SettingsManager::setGlobalStatusMod(false);
+
+        if (pl != nullptr)
+            GUIManager::createAlertLabel(pl);
+            
+        return;
+    }
 
     modStatus = true;
 

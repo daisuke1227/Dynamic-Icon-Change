@@ -31,7 +31,7 @@ class $modify(MyPlayLayer, PlayLayer) {
 		if (!dic->getModStatus()) {
 			dic->getIconManager()->saveIconKit();
 			dic->initMod();
-			dic->enableMod();
+			dic->enableMod(this);
 		}
 
 		return PlayLayer::init(level, useReplay, dontCreateObjects);
@@ -93,7 +93,18 @@ class $modify(MyPauseLayer, PauseLayer) {
 			this, menu_selector(MyPauseLayer::onFlippedToggler), 1.f
 		);
 		enableModToggler->setTag(69);
-		enableModToggler->toggle(dic->getGlobalModStatus());
+
+		if (dic->getWrongIconRange())
+			enableModToggler->setEnabled(false);
+		else
+			enableModToggler->toggle(dic->getGlobalModStatus());
+		
+		auto dicText = CCLabelBMFont::create(
+			"DIC", "bigFont.fnt"
+		);
+		dicText->setPosition(18.f, 27.f);
+		dicText->setScale(0.25f);
+		enableModToggler->addChild(dicText);
 
 		this->getChildByID("right-button-menu")->addChild(enableModToggler);
 		this->getChildByID("right-button-menu")->updateLayout();

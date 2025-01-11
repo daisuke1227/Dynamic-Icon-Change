@@ -56,6 +56,8 @@ class DynamicIconChange {
     bool modStatus;
     bool globalModStatus;
 
+    bool wrongIconRange;
+
     IconManager* im;
     IconLimits* il;
 
@@ -71,7 +73,7 @@ public:
 
     void initMod();
 
-    void enableMod();
+    void enableMod(PlayLayer* pl);
     void disableMod();
     void disableModInGame(PlayerObject* po, int activeMode);
 
@@ -82,8 +84,9 @@ public:
         PlayerObject* po, int gamemodeId, bool p0, bool p1  // player0 and player1
     );
 
-    bool getModStatus()          { return modStatus; }
-    bool getGlobalModStatus()    { return globalModStatus; }
+    bool getModStatus()           { return modStatus; }
+    bool getGlobalModStatus()     { return globalModStatus; }
+    bool getWrongIconRange()      { return wrongIconRange; }
     IconManager* getIconManager() { return im; }
     IconLimits* getIconLimits()   { return il; }
 
