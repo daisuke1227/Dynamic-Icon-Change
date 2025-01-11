@@ -21,20 +21,24 @@ $execute {
 	initDic();
 
 	listenForSettingChanges("disable-mod", [](bool value) {
-		dic->getGlobalModStatus() = !value;
+		dic->setGlobalModStatus(!value);
 	});
 }
 
 class $modify(MyPlayLayer, PlayLayer) {
 
 	bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
-		dic->initMod();
-		dic->getIconManager()->saveIconKit();
+		if (!dic->getModStatus()) {
+			dic->getIconManager()->saveIconKit();
+			dic->initMod();
+			dic->enableMod();
+		}
 
 		return PlayLayer::init(level, useReplay, dontCreateObjects);
 	}
 
 	void onQuit() {
+		dic->getIconManager()->loadIconKit();
 		dic->disableMod();
 
         PlayLayer::onQuit();
@@ -110,7 +114,7 @@ class $modify(MyAppDelegate, AppDelegate) {
 		*/
 
 		if (dic->getModStatus()) 
-			dic->disableMod();
+			dic->getIconManager()->loadIconKit();
 
 		AppDelegate::trySaveGame(p0);
 	}

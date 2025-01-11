@@ -38,23 +38,19 @@ void GUIManager::onFlippedToggler(CCObject* sender) {
     if (togger->getTag() != 69) return;
 
     togger->toggle(togger->isToggled());
-    Mod::get()->setSettingValue("disable-mod", togger->isToggled());
 
     GameManager* gmPtr = GameManager::get();
     DynamicIconChange* dic = DynamicIconChange::get();
     bool globalStatusMod = dic->getGlobalModStatus();
+    log::debug("global status {}; togger status {}", globalStatusMod, togger->isToggled());
 
     if (!togger->isToggled()) {
-        SettingsManager::setGlobalStatusMod(false);
-        globalStatusMod = true;
+        SettingsManager::setGlobalStatusMod(true);
 
         if (dic->getIconLimits() == nullptr) dic->initMod();
 
         dic->enableMod();
     } else {
-        SettingsManager::setGlobalStatusMod(true);
-        globalStatusMod = false;
-
         PlayerObject* player1 = gmPtr->m_playLayer->m_player1;
         int activeMode = 0;
 
@@ -67,6 +63,8 @@ void GUIManager::onFlippedToggler(CCObject* sender) {
         else if (player1->m_isSwing)  activeMode = 7;
 
         dic->disableModInGame(player1, activeMode);
+
+        SettingsManager::setGlobalStatusMod(false);
     }
 }
 
@@ -85,7 +83,7 @@ void DynamicIconChange::initInstance(DynamicIconChange* instance) {
     if (DynamicIconChange::initClass) return;
 
     instance->modStatus = false;
-    instance->globalModStatus = !SettingsManager::getGlobalStatusMod();
+    instance->globalModStatus = SettingsManager::getGlobalStatusMod();
     instance->im = new IconManager;
     instance->il = nullptr;
 
@@ -102,18 +100,14 @@ void DynamicIconChange::initMod() {
 
 void DynamicIconChange::enableMod() {
     if (!this->globalModStatus) return;
-    im->saveIconKit();
 
     modStatus = true;
-
 
     log::debug("ENABLE MOD");
 }
 
 void DynamicIconChange::disableMod() {
     if (!this->globalModStatus) return;
-    
-    this->im->loadIconKit();
 
     modStatus = false;
 
@@ -121,12 +115,15 @@ void DynamicIconChange::disableMod() {
 }
 
 void DynamicIconChange::disableModInGame(PlayerObject* po, int activeMode) {
+    log::debug("FIRST STATE - DISABLE MOD IN GAME");
+    log::debug("! {} !", globalModStatus);
     if (!this->globalModStatus) return;
+    log::debug("TWO STATE - DISABLE MOD IN GAME");
 
     modStatus = false;
     this->im->loadAndUpdateIconKit(po, activeMode);
 
-    log::debug("DISABLE MOD (IN GAME)");
+    log::debug("FINAL STATE - DISABLE MOD IN GAME");
 }
 
 bool DynamicIconChange::validateLimits() {
@@ -156,6 +153,9 @@ void DynamicIconChange::changeMode(
         
         gamemodeId = 0;
     }
+
+    if ((po->m_isShip || po->m_isBird) && gamemodeId != 0)  // change cube icon in ship/ufo
+        this->changeMode(po, 0, p0, p1);
 
     int iconId = this->generateRandIcon(gamemodeId);
 

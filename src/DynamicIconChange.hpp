@@ -31,8 +31,8 @@ public:
 public:
     SettingsManager() = delete;
 
-    static bool getGlobalStatusMod()            { return Mod::get()->getSettingValue<bool>("disable-mod"); }
-    static void setGlobalStatusMod(bool status) { Mod::get()->setSettingValue("disable-mod", status); }
+    static bool getGlobalStatusMod()            { return !Mod::get()->getSettingValue<bool>("disable-mod"); }
+    static void setGlobalStatusMod(bool status) { Mod::get()->setSettingValue("disable-mod", !status); }
 
     static IconLimits* getIconLimits();
 
@@ -82,9 +82,11 @@ public:
         PlayerObject* po, int gamemodeId, bool p0, bool p1  // player0 and player1
     );
 
-    bool& getModStatus()          { return modStatus; }
-    bool& getGlobalModStatus()    { return globalModStatus; }
+    bool getModStatus()          { return modStatus; }
+    bool getGlobalModStatus()    { return globalModStatus; }
     IconManager* getIconManager() { return im; }
     IconLimits* getIconLimits()   { return il; }
+
+    void setGlobalModStatus(bool status) { globalModStatus = status; }
 
 };
