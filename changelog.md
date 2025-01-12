@@ -1,3 +1,8 @@
+# 0.3.2
+- Fixing bugs:
+  - Related to broken robot animation.
+  - Incorrect return of original icons in level.
+
 # 0.3.1
 - Added an option in mod settings to disallow the use of closed icons.
 - Removed dashes in the mod name.

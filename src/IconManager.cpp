@@ -23,7 +23,7 @@ void IconManager::updateIcon(PlayerObject* po, int gamemodeId, int iconId) {
 		case 2: po->updatePlayerRollFrame(iconId);   break;
 		case 3: po->updatePlayerBirdFrame(iconId);   break;
 		case 4: po->updatePlayerDartFrame(iconId);   break;
-		case 5: po->updatePlayerRobotFrame(iconId);  break;
+		case 5: po->updatePlayerRobotFrame(iconId); po->updateRobotAnimationSpeed(); break;
 		case 6: po->updatePlayerSpiderFrame(iconId); break;
 		case 7: po->updatePlayerSwingFrame(iconId);  break;
 
@@ -56,7 +56,10 @@ void IconManager::loadIconKit() {
 void IconManager::loadAndUpdateIconKit(PlayerObject* po, int activeMode) {
     this->loadIconKit();
 
-    this->updateIcon(po, 0, this->savedIconKit[0]);  // First update cube
+	for (int i = 1; i <= 7; i++)  // first update all icons
+		this->updateIcon(po, i, this->savedIconKit[i]);
+
+    this->updateIcon(po, 0, this->savedIconKit[0]);  // second update cube and active mode
     this->updateIcon(po, activeMode, this->savedIconKit[activeMode]);
 }
 
