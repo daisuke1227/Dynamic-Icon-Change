@@ -34,6 +34,8 @@ public:
     static bool getGlobalStatusMod()            { return !Mod::get()->getSettingValue<bool>("disable-mod"); }
     static void setGlobalStatusMod(bool status) { Mod::get()->setSettingValue("disable-mod", !status); }
 
+    static bool getUnlockIcons()                { return Mod::get()->getSettingValue<bool>("unlock-icons"); }
+
     static IconLimits* getIconLimits();
 
 };
@@ -55,11 +57,14 @@ class DynamicIconChange {
 
     bool modStatus;
     bool globalModStatus;
+    bool unlockIcons;
 
     bool wrongIconRange;
 
     IconManager* im;
     IconLimits* il;
+
+    std::vector<std::vector<int>*>* iconList;
 
     std::mt19937 gen;
     std::random_device rd;
@@ -79,17 +84,22 @@ public:
 
     bool validateLimits();
 
-    inline int generateRandIcon(int gamemodeId);
+    int generateRandIcon(int gamemodeId);
     void changeMode(
         PlayerObject* po, int gamemodeId, bool p0, bool p1  // player0 and player1
     );
 
+    bool generateIconList();
+
     bool getModStatus()           { return modStatus; }
     bool getGlobalModStatus()     { return globalModStatus; }
+    bool getUnlockIcons()         { return unlockIcons; }
     bool getWrongIconRange()      { return wrongIconRange; }
+
     IconManager* getIconManager() { return im; }
     IconLimits* getIconLimits()   { return il; }
 
     void setGlobalModStatus(bool status) { globalModStatus = status; }
+    void setUnlockIcons(bool status)     { unlockIcons = status; }
 
 };

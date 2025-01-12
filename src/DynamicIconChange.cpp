@@ -85,8 +85,11 @@ void DynamicIconChange::initInstance(DynamicIconChange* instance) {
     instance->modStatus = false;
     instance->wrongIconRange = false;
     instance->globalModStatus = SettingsManager::getGlobalStatusMod();
+    instance->unlockIcons = SettingsManager::getUnlockIcons();
+    instance->iconList = nullptr;
     instance->im = new IconManager;
     instance->il = nullptr;
+    instance->iconList = nullptr;
 
     DynamicIconChange::initClass = true;
 }
@@ -102,6 +105,12 @@ void DynamicIconChange::initMod() {
     }
 
     if (this->wrongIconRange) this->wrongIconRange = false;  // disable wIR if validation was successful
+
+    if (this->unlockIcons) 
+        if (!this->generateIconList()) {
+            this->wrongIconRange = true;
+            return;
+        }
 
     log::debug("INIT MOD");
 }
@@ -155,8 +164,11 @@ bool DynamicIconChange::validateLimits() {
 	return true;
 }
 
-inline int DynamicIconChange::generateRandIcon(int gamemodeId) {
-	return (this->gen() % (il->iconMax[gamemodeId] - il->iconMin[gamemodeId] + 1)) + il->iconMin[gamemodeId];
+int DynamicIconChange::generateRandIcon(int gamemodeId) {
+    if (this->unlockIcons)  // index on array
+        return (*(*iconList)[gamemodeId])[(this->gen() % (*iconList)[gamemodeId]->size())];  // I love pointers UwU
+    else                    // icon id
+        return (this->gen() % (il->iconMax[gamemodeId] - il->iconMin[gamemodeId] + 1)) + il->iconMin[gamemodeId];
 }
 
 void DynamicIconChange::changeMode(
@@ -178,4 +190,29 @@ void DynamicIconChange::changeMode(
 
     if (po == nullptr) im->setIcon(gamemodeId, iconId);
     else               im->setAndUpdateIcon(po, gamemodeId, iconId);
+}
+
+bool DynamicIconChange::generateIconList() {
+    if (this->iconList == nullptr) this->iconList = new std::vector<std::vector<int>*>;
+    else                           this->iconList->clear();
+
+    for (int i = 0; i <= 7; i++) {
+        auto iv = this->im->getUnlockIcons(i);
+
+        iv->erase(  // range icons
+            std::remove_if(
+                iv->begin(), iv->end(),
+                [&](int const& j) { 
+                    return j > this->il->iconMax[i] || j < this->il->iconMin[i]; 
+                }
+            ), 
+            iv->end()
+        );
+
+        if (iv->size() == 0) return false;
+
+        this->iconList->push_back(iv);
+    }
+
+    return true;
 }

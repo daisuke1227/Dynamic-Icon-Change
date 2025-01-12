@@ -10,10 +10,9 @@
 #include <Geode/modify/AppDelegate.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 
-DynamicIconChange* dic;
+static DynamicIconChange* dic = DynamicIconChange::get();
 
 void initDic() {
-	dic = DynamicIconChange::get();
 	DynamicIconChange::initInstance(dic);
 }
 
@@ -22,6 +21,10 @@ $execute {
 
 	listenForSettingChanges("disable-mod", [](bool value) {
 		dic->setGlobalModStatus(!value);
+	});
+
+	listenForSettingChanges("unlock-icons", [](bool value) {
+		dic->setUnlockIcons(value);
 	});
 }
 

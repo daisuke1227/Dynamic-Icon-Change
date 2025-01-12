@@ -60,3 +60,12 @@ void IconManager::loadAndUpdateIconKit(PlayerObject* po, int activeMode) {
     this->updateIcon(po, activeMode, this->savedIconKit[activeMode]);
 }
 
+std::vector<int>* IconManager::getUnlockIcons(int iconType) {
+	auto unlockIcons = new std::vector<int>;
+	auto it = static_cast<IconType>(iconType);
+
+	for (int i = 1; i <= this->iconLimits[iconType]; i++)
+		if (this->gmPtr->isIconUnlocked(i, it)) unlockIcons->push_back(i);
+
+	return unlockIcons;
+}

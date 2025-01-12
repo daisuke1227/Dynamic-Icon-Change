@@ -1,3 +1,7 @@
+# 0.3.1
+- Added an option in mod settings to disallow the use of closed icons.
+- Removed dashes in the mod name.
+
 # 0.3.0
 - Global code refactoring.
 - Improving the toggler in pause:

@@ -6,6 +6,8 @@ class IconManager {
 
     int savedIconKit[8];
     GameManager* gmPtr;
+    
+    inline static int iconLimits[8] = {485, 169, 118, 149, 96, 68, 69, 43};
 
 public:
     IconManager()
@@ -27,5 +29,8 @@ public:
     void loadAndUpdateIconKit(
         PlayerObject* po, int activeMode
     );
+
+    std::vector<int>* getUnlockIcons(int iconType);
+    static int* getIconLimits() { return iconLimits; }
 
 };
