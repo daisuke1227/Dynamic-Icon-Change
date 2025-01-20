@@ -71,7 +71,7 @@ class DynamicIconChange {
 
 public:
     DynamicIconChange() : gen(rd()) {};
-    ~DynamicIconChange() { delete il; delete im; DynamicIconChange::initClass = false; };
+    ~DynamicIconChange() { delete il; delete im; delete iconList; DynamicIconChange::initClass = false; };
 
     static DynamicIconChange* get();
     static void initInstance(DynamicIconChange* instance);
