@@ -10,7 +10,7 @@
 
 	"id": "trealdry.dynamic-icon-change",
 	"name": "Dynamic Icon Change",
-	"version": "v0.3.3",
+	"version": "v0.4.0",
 	"developers": ["TrealDry", "MrKolii"],
 	"description": "Dynamically changes icons during game play.",
 
@@ -21,13 +21,12 @@
 		"community": "https://discord.gg/qFMn5VvwCB"
 	},
 
-	"dependencies": [
-		{
-			"id": "geode.node-ids",
+	"dependencies": {
+		"geode.node-ids": {
 			"version": ">=1.19.0",
 			"importance": "required"
 		}
-	],
+	},
 
 	"settings": {
 		"main-settings": {
