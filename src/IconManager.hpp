@@ -2,7 +2,7 @@
 
 #include "includes.hpp"
 
-#if APPLE
+#if __APPLE__
     static bool isMacOs = true;
 #else
     static bool isMacOs = false;
