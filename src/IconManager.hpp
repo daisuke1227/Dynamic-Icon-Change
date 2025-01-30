@@ -2,6 +2,12 @@
 
 #include "includes.hpp"
 
+#if APPLE
+    static bool isMacOs = true;
+#else
+    static bool isMacOs = false;
+#endif
+
 class IconManager {
 
     int savedIconKit[8];
@@ -33,4 +39,5 @@ public:
     std::vector<int>* getUnlockIcons(int iconType);
     static int* getIconLimits() { return iconLimits; }
 
+    void updateRobotAnimationSpeed(PlayerObject* po);
 };

@@ -23,7 +23,7 @@ void IconManager::updateIcon(PlayerObject* po, int gamemodeId, int iconId) {
 		case 2: po->updatePlayerRollFrame(iconId);   break;
 		case 3: po->updatePlayerBirdFrame(iconId);   break;
 		case 4: po->updatePlayerDartFrame(iconId);   break;
-		case 5: po->updatePlayerRobotFrame(iconId); po->updateRobotAnimationSpeed(); break;
+		case 5: po->updatePlayerRobotFrame(iconId); this->updateRobotAnimationSpeed(po); break;
 		case 6: po->updatePlayerSpiderFrame(iconId); break;
 		case 7: po->updatePlayerSwingFrame(iconId);  break;
 
@@ -71,4 +71,9 @@ std::vector<int>* IconManager::getUnlockIcons(int iconType) {
 		if (this->gmPtr->isIconUnlocked(i, it)) unlockIcons->push_back(i);
 
 	return unlockIcons;
+}
+
+void IconManager::updateRobotAnimationSpeed(PlayerObject* po) {
+	if (isMacOs) return;
+	po->updateRobotAnimationSpeed();
 }
