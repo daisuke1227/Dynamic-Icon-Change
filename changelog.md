@@ -1,3 +1,8 @@
+# 0.4.0
+- Added cross-platform (mod is now available for android and macos).
+- Fixed initialization of random function.
+- Fixed description, and dependencies in config.
+
 # 0.3.3
 - Changed geode sdk version from 4.0.1 to 4.2.0.
 - Added explicit dependency on node-id-mod.
