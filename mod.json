@@ -12,7 +12,7 @@
 	"name": "Dynamic Icon Change",
 	"version": "v0.4.0",
 	"developers": ["TrealDry", "MrKolii"],
-	"description": "Dynamically changes icons during game play.",
+	"description": "Icon change when going through portal.",
 
 	"tags": ["customization", "offline"],
 
