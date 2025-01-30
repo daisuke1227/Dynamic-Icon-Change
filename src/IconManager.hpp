@@ -33,4 +33,9 @@ public:
     std::vector<int>* getUnlockIcons(int iconType);
     static int* getIconLimits() { return iconLimits; }
 
+    #if __APPLE__
+        void updateRobotAnimFix(PlayerObject* po) {;};
+    #else
+        void updateRobotAnimFix(PlayerObject* po) { po->updateRobotAnimationSpeed(); };
+    #endif
 };

@@ -12,5 +12,5 @@ More fine tuning (use of certain icons, range of choices) can be found in the mo
 
 # Developers
 
-**Coder** - TrealDry\
+**Coder** - TrealDry  \
 **Mod idea, logo designer** - MrKolii

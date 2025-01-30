@@ -70,7 +70,7 @@ class DynamicIconChange {
     std::random_device rd;
 
 public:
-    DynamicIconChange() : gen(rd()) {};
+    DynamicIconChange()  { gen.seed(rd()); };
     ~DynamicIconChange() { delete il; delete im; delete iconList; DynamicIconChange::initClass = false; };
 
     static DynamicIconChange* get();

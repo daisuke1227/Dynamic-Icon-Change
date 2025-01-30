@@ -1,7 +1,11 @@
 # Dynamic Icon Change
-Dynamically changes icons during game play.
+Icon change when going through portal.
 
 <img src="logo.png" width="150" alt="the mod's logo" />
+
+## Download
+- [Official Mod Store](https://geode-sdk.org/mods/trealdry.dynamic-icon-change)
+- [GitHub Releases](https://github.com/TrealDry/Dynamic-Icon-Change/releases/latest)
 
 ## Build instructions
 For more info, see [our docs](https://docs.geode-sdk.org/getting-started/create-mod#build)
