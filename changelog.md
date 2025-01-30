@@ -1,3 +1,6 @@
+# 0.4.1
+- Fixed a bug where mod would disable not correctly (when entering the level editor).
+
 # 0.4.0
 - Added cross-platform (mod is now available for android and macos).
 - Fixed initialization of random function.

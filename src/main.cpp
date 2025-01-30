@@ -9,6 +9,7 @@
 #include <Geode/modify/CCDirector.hpp>
 #include <Geode/modify/AppDelegate.hpp>
 #include <Geode/modify/PlayerObject.hpp>
+#include <Geode/modify/LevelEditorLayer.hpp>
 
 static DynamicIconChange* dic = DynamicIconChange::get();
 
@@ -117,6 +118,19 @@ public:
 	void onFlippedToggler(CCObject* sender) {
 		GUIManager::onFlippedToggler(sender);
 	}
+};
+
+class $modify(MyLevelEditorLayer, LevelEditorLayer) {
+
+	bool init(GJGameLevel* p0, bool p1) {
+		if (dic->getModStatus()) {
+			dic->getIconManager()->loadIconKit();
+			dic->disableMod();
+		}
+
+		return LevelEditorLayer::init(p0, p1);
+	}
+
 };
 
 class $modify(MyAppDelegate, AppDelegate) {
