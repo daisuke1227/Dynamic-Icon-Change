@@ -90,6 +90,7 @@ void DynamicIconChange::initInstance(DynamicIconChange* instance) {
     instance->im = new IconManager;
     instance->il = nullptr;
     instance->iconList = nullptr;
+    instance->inLevel = false;
 
     DynamicIconChange::initClass = true;
 }
@@ -176,6 +177,8 @@ void DynamicIconChange::changeMode(
 ) {
     if (!this->modStatus) return;
 
+    if ( this->im->getPlayerStatus(true)->pObjOwner == nullptr ) this->im->initPlayerStatus();
+
     if (!p0 && !p1) {
         if (po->m_isShip || po->m_isBall || po->m_isBird || po->m_isDart || 
 		    po->m_isRobot || po->m_isSpider || po->m_isSwing) return;  // if gamemode is not a cube
@@ -188,8 +191,28 @@ void DynamicIconChange::changeMode(
 
     int iconId = this->generateRandIcon(gamemodeId);
 
-    if (po == nullptr) im->setIcon(gamemodeId, iconId);
-    else               im->setAndUpdateIcon(po, gamemodeId, iconId);
+    if (po == nullptr) im->setIcon(nullptr, gamemodeId, iconId, false);
+    else               im->setAndUpdateIcon(po, gamemodeId, iconId, false);
+}
+
+void DynamicIconChange::setMiniMode(PlayerObject* po, bool status) {
+    if ( this->im->getPlayerStatus(true)->pObjOwner == nullptr && this->inLevel ) this->im->initPlayerStatus();
+    
+    bool isFirstPlayer = po == this->im->getPlayerObject(true);
+    PlayerStatus* ps = this->im->getPlayerStatus(isFirstPlayer);
+    ps->isMiniMode = status;
+
+    log::debug("is first player - {}, mini mode - {}", isFirstPlayer, this->im->getPlayerStatus(isFirstPlayer)->isMiniMode);
+
+    if ( !this->modStatus ) return;
+
+    if (!status)    // update cube and ball after resize
+        if (po->m_isBall) 
+            this->im->updateIcon(po, 2, ps->iconKit[2], false);
+
+        else if (!po->m_isShip && !po->m_isBall && !po->m_isBird && !po->m_isDart &&  // robtop is gay!
+		        !po->m_isRobot && !po->m_isSpider && !po->m_isSwing)                  // if is a cube
+            this->im->updateIcon(po, 0, ps->iconKit[0], false);
 }
 
 bool DynamicIconChange::generateIconList() {

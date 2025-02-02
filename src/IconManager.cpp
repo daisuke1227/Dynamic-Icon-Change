@@ -1,6 +1,13 @@
 #include "IconManager.hpp"
 
-void IconManager::setIcon(int gamemodeId, int iconId) {
+void IconManager::setIcon(PlayerObject* po, int gamemodeId, int iconId, bool ignoreMiniMode) {
+	bool isFirstPlayer = po == this->getPlayerObject(true);
+
+	if (gamemodeId == 0 || gamemodeId == 2) {  // if enable "default mini icons"
+		if (this->isEnableDefMiniIcons());
+			if (this->getPlayerStatus(isFirstPlayer)->isMiniMode && !ignoreMiniMode) return;
+	}
+
     switch (gamemodeId) {
 		case 0: gmPtr->setPlayerFrame(iconId);  break;
 		case 1: gmPtr->setPlayerShip(iconId);   break;
@@ -13,10 +20,19 @@ void IconManager::setIcon(int gamemodeId, int iconId) {
 
 		default: break;
 	}
+	this->getPlayerStatus(isFirstPlayer)->iconKit[gamemodeId] = iconId;
+
     log::debug("SET ICON STATE: GM {} - {}", gamemodeId, iconId);
 }
 
-void IconManager::updateIcon(PlayerObject* po, int gamemodeId, int iconId) {
+void IconManager::updateIcon(PlayerObject* po, int gamemodeId, int iconId, bool ignoreMiniMode) {
+	if (gamemodeId == 0 || gamemodeId == 2) {  // if enable "default mini icons"
+		if (this->isEnableDefMiniIcons()) {
+			bool isFirstPlayer = po == this->getPlayerObject(true);
+			if (this->getPlayerStatus(isFirstPlayer)->isMiniMode && !ignoreMiniMode) return;
+		}
+	}
+
     switch (gamemodeId) {
 		case 0: po->updatePlayerFrame(iconId);       break;
 		case 1: po->updatePlayerShipFrame(iconId);   break;
@@ -32,9 +48,9 @@ void IconManager::updateIcon(PlayerObject* po, int gamemodeId, int iconId) {
     log::debug("UPDATE ICON STATE: GM {} - {}", gamemodeId, iconId);
 }
 
-void IconManager::setAndUpdateIcon(PlayerObject* po, int gamemodeId, int iconId) {
-	this->setIcon(gamemodeId, iconId);
-	this->updateIcon(po, gamemodeId, iconId);
+void IconManager::setAndUpdateIcon(PlayerObject* po, int gamemodeId, int iconId, bool ignoreMiniMode) {
+	this->setIcon(po, gamemodeId, iconId, ignoreMiniMode);
+	this->updateIcon(po, gamemodeId, iconId, ignoreMiniMode);
 }
 
 void IconManager::saveIconKit() {
@@ -42,13 +58,16 @@ void IconManager::saveIconKit() {
 		log::debug("SAVE ICON KIT");
 		this->savedIconKit[i] = gmPtr->activeIconForType(static_cast<IconType>(i));
 		log::debug("SAVE STATE: GM {} - {}", i, this->savedIconKit[i]);
+
+		this->ps1.iconKit[i] = this->savedIconKit[i]; 
+		this->ps2.iconKit[i] = this->savedIconKit[i];
 	}
 }
 
 void IconManager::loadIconKit() {
     log::debug("LOAD ICON KIT");
 	for (int i = 0; i <= 7; i++) {
-		this->setIcon(i, this->savedIconKit[i]);
+		this->setIcon(nullptr, i, this->savedIconKit[i], true);
 		log::debug("LOAD STATE: GM {} - {}", i, this->savedIconKit[i]);
 	}
 }
@@ -56,11 +75,20 @@ void IconManager::loadIconKit() {
 void IconManager::loadAndUpdateIconKit(PlayerObject* po, int activeMode) {
     this->loadIconKit();
 
-	for (int i = 1; i <= 7; i++)  // first update all icons
-		this->updateIcon(po, i, this->savedIconKit[i]);
+	for (int i = 0; i <= 7; i++)  // first update all icons
+		this->updateIcon(po, i, this->savedIconKit[i], true);
 
-    this->updateIcon(po, 0, this->savedIconKit[0]);  // second update cube and active mode
-    this->updateIcon(po, activeMode, this->savedIconKit[activeMode]);
+	bool isFirstPlayer = po == this->getPlayerObject(true);
+
+	// second update cube ...
+	if (this->getPlayerStatus(isFirstPlayer)->isMiniMode && this->isEnableDefMiniIcons()) {  // if cube (or ball) is mini mode
+		po->updatePlayerFrame(0);
+		if (activeMode == 2) po->updatePlayerRollFrame(0);
+	} else {
+		this->updateIcon(po, 0, this->savedIconKit[0], false);  // if cube is normal size
+	}
+	
+	this->updateIcon(po, activeMode, this->savedIconKit[activeMode], false);  // ... and active mode
 }
 
 std::vector<int>* IconManager::getUnlockIcons(int iconType) {
@@ -71,4 +99,8 @@ std::vector<int>* IconManager::getUnlockIcons(int iconType) {
 		if (this->gmPtr->isIconUnlocked(i, it)) unlockIcons->push_back(i);
 
 	return unlockIcons;
+}
+
+void IconManager::clearPlayerStatus() {
+	ps1.clear(); ps2.clear();
 }

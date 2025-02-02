@@ -61,6 +61,8 @@ class DynamicIconChange {
 
     bool wrongIconRange;
 
+    bool inLevel;
+
     IconManager* im;
     IconLimits* il;
 
@@ -88,6 +90,7 @@ public:
     void changeMode(
         PlayerObject* po, int gamemodeId, bool p0, bool p1  // player0 and player1
     );
+    void setMiniMode(PlayerObject* po, bool status);
 
     bool generateIconList();
 
@@ -95,11 +98,13 @@ public:
     bool getGlobalModStatus()     { return globalModStatus; }
     bool getUnlockIcons()         { return unlockIcons; }
     bool getWrongIconRange()      { return wrongIconRange; }
+    bool getInLevel()             { return inLevel; }
 
     IconManager* getIconManager() { return im; }
     IconLimits* getIconLimits()   { return il; }
 
     void setGlobalModStatus(bool status) { globalModStatus = status; }
     void setUnlockIcons(bool status)     { unlockIcons = status; }
+    void setInLevel(bool status)         { inLevel = status; }
 
 };

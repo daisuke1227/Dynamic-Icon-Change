@@ -35,6 +35,7 @@ class $modify(MyPlayLayer, PlayLayer) {
 		if (!dic->getModStatus()) {
 			dic->getIconManager()->saveIconKit();
 			dic->initMod();
+			dic->setInLevel(true);
 			dic->enableMod(this);
 		}
 
@@ -43,6 +44,8 @@ class $modify(MyPlayLayer, PlayLayer) {
 
 	void onQuit() {
 		dic->getIconManager()->loadIconKit();
+		dic->getIconManager()->clearPlayerStatus();
+		dic->setInLevel(false);
 		dic->disableMod();
 
         PlayLayer::onQuit();
@@ -51,6 +54,11 @@ class $modify(MyPlayLayer, PlayLayer) {
 };
 
 class $modify(MyPlayerObject, PlayerObject) {
+
+	void togglePlayerScale(bool p0, bool p1) {
+		dic->setMiniMode(this, p0);
+		PlayerObject::togglePlayerScale(p0, p1);
+	}
 
 	void toggleFlyMode(bool p0, bool p1) {
 		dic->changeMode(this, 1, p0, p1);
@@ -125,6 +133,8 @@ class $modify(MyLevelEditorLayer, LevelEditorLayer) {
 	bool init(GJGameLevel* p0, bool p1) {
 		if (dic->getModStatus()) {
 			dic->getIconManager()->loadIconKit();
+			dic->getIconManager()->clearPlayerStatus();
+			dic->setInLevel(false);
 			dic->disableMod();
 		}
 
